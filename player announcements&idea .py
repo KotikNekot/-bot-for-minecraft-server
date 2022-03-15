@@ -37,6 +37,32 @@ async def tvorka(ctx, *, texttv):
             await ctx.send("Похоже, у вас нет проходки.")
     except:
         await ctx.send("Похоже, у вас нету в нашей гильдии.")
+        
+# не вижу смысла делать в разных файлах, ведь 1 и тоже.     
+@bot.command(aliases=['идея', 'Идея'])
+async def idea(ctx, *, idea):
+    global message
+    guild = bot.get_guild(948660312280817764)
+    embed = disnake.Embed(title='Идея', description=idea)
+    try:
+        member = await guild.fetch_member(ctx.author.id)
+        if '952365239712747581' in str(member.roles):
+            channel = bot.get_channel(949268141836496957)
+            if ctx.message.attachments:
+                embed.set_image(url=ctx.message.attachments[0].url)
+                message = await channel.send(embed=embed)
+            else:
+                message = await channel.send(embed=embed)
+            embed2 = disnake.Embed(title="Спасибо", description="Ура, ваша идея опубликованно!\n"
+                                                                f"Вот ссылка на него - [тык]({message.jump_url})")
+            await ctx.reply(embed=embed2)
+            await message.create_thread(name=f'Идея {ctx.author.name}', auto_archive_duration=None)
+            await message.add_reaction('👍')
+            await message.add_reaction('👎')
+        else:
+            await ctx.send("Похоже, у вас нет проходки.")
+    except:
+        await ctx.send("Похоже, у вас нету в нашей гильдии.")
 
 
 bot.run(token)
